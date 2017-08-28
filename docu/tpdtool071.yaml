@@ -1,0 +1,385 @@
+swagger: '2.0'
+info:
+  version: "6.0.0"
+  title: TPDTool Service API
+  description: API to connect to the CLMTool Service with a CLM Dashboard
+host: 'ssejtsserver:9443'
+schemes:
+  - https
+security:
+  - Authorization: []
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /command:
+    get:
+      produces:
+        - text/plain
+      summary: gets the current set command 
+      description: gets the current set command 
+      security:
+        - Authorization: []
+      tags:
+        - command
+      responses:
+        '200':
+          description: Returns the setted command
+          schema:
+            $ref: '#/definitions/ExecutionCommand'
+        '400':
+          description: >-
+            The request could not be understood by the server due to malformed
+            or missing request parameter
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      produces:
+        - text/plain
+      consumes:
+        - json
+      summary: sets a command for the running process
+      description: sets a command for the running process
+      parameters:
+        - name: ExecutionCommand
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ExecutionCommand'
+      security:
+        - Authorization: []
+      tags:
+        - command
+      responses:
+        '200':
+          description: Returns the command set (Resume, Stop, Pause)
+          schema:
+            type: string
+        '400':
+          description: >-
+            The request could not be understood by the server due to malformed
+            or missing request parameter
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /logging/log:
+      get:
+        produces:
+          - text/plain
+        summary: Get the Logfile content
+        description: The Logfile content as a String
+        security:
+          - Authorization: []
+        tags:
+          - Logging
+        responses:
+          '200':
+            description: Returns the Logfile content
+            schema:
+              type: string
+          '400':
+            description: >-
+              The request could not be understood by the server due to malformed
+              or missing request parameter
+          '500':
+            description: unexpected error
+            schema:
+              $ref: '#/definitions/Error'
+  /logging/currentlevel:
+      get:
+        produces:
+          - text/plain
+        summary: Get the current loglevel 
+        description: The current loglevel String
+        security:
+          - Authorization: []
+        tags:
+          - Logging
+        responses:
+          '200':
+            description: Returns the current loglevel content
+            schema:
+              type: string
+          '400':
+            description: >-
+              The request could not be understood by the server due to malformed
+              or missing request parameter
+          '500':
+            description: unexpected error
+            schema:
+              $ref: '#/definitions/Error'
+      put:
+        consumes:
+          - text/plain
+        produces:
+          - text/plain
+        summary: sets the current loglevel
+        description: sets the current loglevel (Trace,Info,Debug,Warning,Error), if wrong loglevel was given, loglevel automatically changes to DEBUG
+        parameters:
+        - name: LogLevel
+          in: path
+          required: true
+          schema:
+            $ref: '#/definitions/LogLevel'
+        security:
+          - Authorization: []
+        tags:
+          - Logging
+        responses:
+          '200':
+            description: Returns the set loglevel
+            schema:
+              type: string
+          '400':
+            description: >-
+              The request could not be understood by the server due to malformed
+              or missing request parameter
+          '500':
+            description: unexpected error
+            schema:
+              $ref: '#/definitions/Error'  
+  /login:
+    post:
+      consumes:
+      - json
+      produces:
+      - text/plain
+      summary: Login to the api
+      description: >-
+        Authenticate to the system and receive the secret which is used in all
+        subsequent calls. The secret is also used for websocket connections.
+      parameters:
+        - name: userCredentials
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserCredentials'
+      security:
+        - Authorization: []
+      tags:
+        - Login
+      responses:
+        '200':
+          description: Returns the security token
+          schema:
+            type: string
+        '400':
+          description: >-
+            The request could not be understood by the server due to malformed
+            or missing request parameters
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: User name and password do not match.
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /progress:
+    get:
+      produces:
+        - text/plain
+      summary: Get the current of the process
+      description: the progress as from 0-100 + message
+      security:
+        - Authorization: []
+      tags:
+        - progress
+      responses:
+        '200':
+          description: Returns the progress + message by process
+          schema:
+            type: string          
+        '400':
+          description: >-
+            The request could not be understood by the server due to malformed
+            or missing request parameter
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /settings:
+    get:
+      summary: get globalconfig
+      description: get globalconfig
+      security:
+        - Authorization: []
+      tags:
+        - settings
+      responses:
+        '200':
+          description: Returns current settings
+          schema:
+            $ref: '#/definitions/Settings'
+        '400':
+          description: >-
+            The request could not be understood by the server due to malformed
+            or missing request parameter
+        '404':
+          description: The name could not be resolved
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /start:
+    post:
+      produces:
+        - text/plain
+      consumes:
+        - json
+      summary: starts the tcer creation process
+      description:  starts the tcer creation process
+      parameters:
+        - name: ConfigurationProperties
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ConfigurationProperties'
+      security:
+        - Authorization: []
+      tags:
+        - start
+      responses:
+        '200':
+          description: Returns text, process has started
+          schema:
+            type: string
+        '400':
+          description: >-
+            The request could not be understood by the server due to malformed
+            or missing request parameter
+        '500':
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+securityDefinitions:
+  Authorization:
+    type: apiKey
+    description: >-
+      The token which is acquired from the login service and supplied in the
+      header to access the other services.
+    name: Authorization
+    in: header
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+        description: Language-specific overall error message
+  ServiceStatus:
+    type: object
+    description: ServiceStatus
+    properties:
+      progress:
+        type: integer
+        description: progress 0 - 100
+      error:
+        type: string
+        description: Errorcode and Errorrext which occured on the server
+    example:
+      progress: 0
+      analysis_status: -1
+      deletion_status: 0
+      error: Could not find ProjectArea under the provided path
+  UserCredentials:
+    type: object
+    description: User credentials to login to the system
+    properties:
+      name:
+        type: string
+        description: The username
+      password:
+        type: string
+        description: The password
+      server:
+        type: string
+        description: The rm server url
+    example:
+      name: rational
+      password: rational
+      server: 'https://ssejtsserver:9443/rm'
+  ExecutionCommand:
+    description: execution command to set
+    properties:
+      schema:
+        type: string
+        enum: [stop,resume,pause]
+    example:
+      Executioncommand: stop
+  Settings:
+    description: settings which have been set on the system
+    example:
+  LogLevel:
+    description: loglevel to set
+    properties:
+      schema:
+          $ref: '#/definitions/LogLevel'
+    example:
+      level: Debug
+  ConfigurationProperties:
+    type: object
+    description: Configuration Properties given for the startprogramm
+    properties:
+      projectAreaRM:
+        type: string
+        description: The projectAreaRM path
+      projectAreaQM:
+        type: string
+        description: The projectAreaQM path
+      projectAreaCCM:
+        type: string
+        description: The projectAreaCCM path
+      templateTCER:
+        type: string
+        description: The templateTCER path
+      defaultTCER:
+        type: string
+        description: The defaultTCER path
+      xmlFileName:
+        type: string
+        description: The xmlFileName path
+      workIdemID:
+        type: string
+        description: The workIdem id number
+      testPlanID:
+        type: string
+        description: The testPlanID number
+      iterationName:
+        type: string
+        description: The iterationName
+      configContext:
+        type: string
+        description: The rm configContext
+      reqAttributes:
+        type: string
+        description: The reqAttributes
+      environmentMapping:
+        type: string
+        description: The environmentMapping path
+      csvSeparator:
+        type: string
+        description: ThecsvSeparator
+    example:
+      projectAreaRM : GCRM
+      projectAreaQM : GCQM
+      projectAreaCCM : GCCCM
+      templateTCER : C:\\temp\\RunConfig\\TemplateTCER.txt
+      defaultTCER : C:\\temp\\RunConfig\\DefaultTCER.properties
+      xmlFileName : C:\\temp\\RunConfig\\Document.xml
+      workItemID : 16
+      testPlanID : 2
+      configContext : https://vm.uetersen.com:9443/gc/configuration/2
+      reqAttributes : C:\\temp\\RunConfig\\AttributeMapping.csv
+      environmentMapping : C:\\temp\\RunConfig\\EnvironmentMapping.csv
+      csvSeparator : ","

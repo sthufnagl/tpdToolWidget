@@ -1,0 +1,219 @@
+---
+swagger: "2.0"
+info:
+  description: "CLM TestPlaningDraftTool"
+  version: "8.0.0"
+  title: "CLM TestPlaningDraftTool"
+  contact:
+    name: "Stefan Hufnagl"
+    email: "hufnagl@de.ibm.com"
+host: "localhost:9443"
+basePath: "/"
+tags:
+- name: "start"
+- name: "login"
+- name: "logging"
+- name: "command"
+- name: "progress"
+schemes:
+- "https"
+consumes:
+- "application/json"
+- "application/text"
+produces:
+- "application/json"
+- "application/text"
+paths:
+  /command:
+    get:
+      tags:
+      - "command"
+      summary: "get the set command"
+      description: ""
+      operationId: "command"
+      parameters: []
+      responses:
+        200:
+          description: "Returned the set ExecutionCommand"
+        403:
+          description: "No ExecutionCommand set yet"
+      security:
+      - Authorization: []
+    post:
+      tags:
+      - "command"
+      summary: "sets the execution command and returns the set one if successful.\
+        \ Possible Values: Resume, Pause, Stop"
+      description: ""
+      operationId: "command"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "ExecutionCommand which was set"
+        400:
+          description: "Invalid ExecutionCommand supplied"
+        403:
+          description: "ExecutionCommand was valid, but no process was running to\
+            \ supply it with"
+      security:
+      - Authorization: []
+  /logging/currentlevel:
+    get:
+      tags:
+      - "logging"
+      summary: "Gets the current LogLevel"
+      description: ""
+      operationId: "getLogLevel"
+      parameters: []
+      responses:
+        200:
+          description: "Returns current LogLevel"
+      security:
+      - Authorization: []
+    put:
+      tags:
+      - "logging"
+      summary: "Sets the LogLevel and returns the set one, if level could not be found\
+        \ the default DEBUG will be used. Values can be: DEBUG, TRACE, INFO, ALL,\
+        \ WARN, ERROR, OFF"
+      description: ""
+      operationId: "setLogLevel"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "Returns the set level"
+      security:
+      - Authorization: []
+  /logging/log:
+    get:
+      tags:
+      - "logging"
+      summary: "Returns the log content"
+      description: ""
+      operationId: "getLog"
+      parameters: []
+      responses:
+        200:
+          description: "Returns the log"
+        500:
+          description: "Internal server error while trying to get the log"
+      security:
+      - Authorization: []
+  /login:
+    post:
+      tags:
+      - "login"
+      summary: "login and returns token if successful"
+      description: ""
+      operationId: "loginPost"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/UserCredentials"
+      responses:
+        200:
+          description: "Login successful, returns token"
+        500:
+          description: "Internal server error while trying to get the log"
+        401:
+          description: "Wrong supplied credentials"
+  /progress:
+    get:
+      tags:
+      - "progress"
+      summary: "Gets the current progress of the start process"
+      description: ""
+      operationId: "progress"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "Returns current Progress, even 0 if process hasn't started\
+            \ yet"
+      security:
+      - Authorization: []
+  /start:
+    post:
+      tags:
+      - "start"
+      summary: "Starts the service with the Properties"
+      description: ""
+      operationId: "startService"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/ConfigurationProperty"
+      responses:
+        200:
+          description: "starts the process"
+        403:
+          description: "The process has already started"
+      security:
+      - Authorization: []
+definitions:
+  ConfigurationProperty:
+    type: "object"
+    properties:
+      projectAreaRM:
+        type: "string"
+      projectAreaQM:
+        type: "string"
+      projectAreaCCM:
+        type: "string"
+      templateTCER:
+        type: "string"
+      defaultTCER:
+        type: "string"
+      xmlFileName:
+        type: "string"
+      workItemID:
+        type: "string"
+      testPlanID:
+        type: "string"
+      iterationName:
+        type: "string"
+      configContext:
+        type: "string"
+      reqAttributes:
+        type: "string"
+      environmentMapping:
+        type: "string"
+      csvSeparator:
+        type: "string"
+  UserCredentials:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      password:
+        type: "string"
+      server:
+        type: "string"
+  Level:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      resourceBundleName:
+        type: "string"
+      localizedName:
+        type: "string"

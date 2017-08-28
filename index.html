@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tpd Tool Widget Version 0.1 (07/13/2017)</title>
+
+    <link rel="stylesheet"         href="css/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet"         href="css/jquery-ui.min.css">
+    <link rel="stylesheet"         href="css/jquery.percentageloader-0.1.css">
+    <link rel="stylesheet"         href="css/keyScript.css">
+
+    //Read the config file with the specific settings
+    <script type="text/javascript" src="config.js"></script>
+
+    <script type="text/javascript" src="lib/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="lib/jquery-ui.min.1114.js"></script>
+    <script type="text/javascript" src="lib/jquery.ddslick.min.js"></script>
+    <script type="text/javascript" src="lib/log4javascript.js"></script>
+    <script type="text/javascript" src="lib/jquery.percentageloader-0.1.min.js"></script>
+    <script type="text/javascript" src="lib/progressbar.js"></script>
+    <script type="text/javascript" src="lib/rm.js"></script>
+    <script type="text/javascript" src="lib/gc.js"></script>
+    <script type="text/javascript" src="lib/init.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+</head>
+<body>
+<p>
+    This widget sets tpd Tool variables
+</p>
+<div id="dialog-form" title="Type in the CLM credentials...">
+    <p class="validateTips">All fields are required.</p>
+    <form>
+        <fieldset>
+            <label for="username">Name</label>
+            <input type="text"     name="username" id="username" value="" class="text ui-widget-content ui-corner-all">
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all">
+
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+        <p>
+          <a href="test/tr.html"target="_blank" >Tests: REST API</a>
+          <br />
+          <a href="dist/index.html#/" target="_blank" >Docu: REST API</a>
+          <br />
+          <hr />
+        </p>
+    </form>
+</div>
+
+<div id="dngPa" ></div>
+<div id="stream"></div>
+
+<div id="spa"></div>
+<p>
+</p>
+
+<div id="progressbarlabel">
+  <p>
+    <a href="test/tr.html"target="_blank" >Tests: REST API</a>
+    <br />
+    <a href="dist/index.html#/" target="_blank" >Docu: REST API</a>
+    <br />
+    <hr />
+  </p>
+</div>
+<div id="progressbar"></div>
+<div id="result"></div>
+<div id="container">
+
+    <div id="testdata"      class="topLoaders">Set Execution Variables</div>
+    <div class="topLoaders" style="width: 90px; height: 90px; position: relative;"> </div>
+    <div id="deleted"       class="topLoaders"></div>
+</div>
+
+
+<p>
+</p>
+
+<div style="height: 36px;width: 353px;margin: auto;">
+    <button class="button" id="startWorking" style="margin-top: 10px;  margin-left: 0px; font-size: 23px;"  onclick="rm.startWorking();">
+        Start
+    </button>
+</div>
+</body>
+</html>

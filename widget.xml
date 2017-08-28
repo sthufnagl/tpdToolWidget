@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<Module specificationVersion="2.0">
+    <ModulePrefs
+            title="tpd Tool Widget Version 0.8 (08/23/2017)"
+            height="400"
+            widht="400"
+            scrolling="true"  >
+
+        <Require feature="setprefs"/>
+		<Require feature="dynamic-height"/>
+    </ModulePrefs>
+    <UserPref name="ProjectAreaURI"         display_name="ProjectAreaURI name or URL"   default_value="TRAXX AC3 (RM)"          required="true" />
+
+    <UserPref name="artifactType"           display_name="Artifact type name or URL"    default_value="Software Requirement"    required="true" />
+    <UserPref name="parameterType"          display_name="Parameter type name or URL"   default_value="Parameter"               required="true" />
+
+	<UserPref name="userName"                 display_name="User"                                                                 required="true" datatype="hidden" />
+    <UserPref name="userPassword"           display_name="Password"                                                             required="true" datatype="hidden" />
+    <UserPref name="tpdToolService"         display_name="tpdTool Service Contextroot"                                          required="true" default_value="tpdtool06"/>
+
+
+    <UserPref name="jtsServerURL"  display_name="JTS Server URL"                         default_value="https://SSE-Win2008:9443/jts"            required="true" />
+    <UserPref name="gcServerURL"  display_name="Global Config Server URL"               default_value="https://SSE-Win2008:9443/gc"            required="true" />
+
+    <UserPref name="logging"                display_name="Enable Logging?"                          datatype="bool"         default_value="false"/>
+    <Optional feature="com.ibm.rdm.rm.api"></Optional>
+
+    <Content type="html" href="index.html"/>
+
+</Module>

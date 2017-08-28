@@ -1,0 +1,51 @@
+line.link {
+    stroke: #ccc;
+}
+
+circle.node {
+    fill: #000;
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+body {
+      margin: 0px;
+      padding: 0px;
+      //background-image: linear-gradient(180deg, transparent, blue 99%);
+      background:url(../images/bg_main.jpg) top center repeat-x #d6eeff;
+  }
+
+#myIframe{
+    height: 700px;
+    width:  500px;
+}
+
+.topLoaders {
+    float:left;
+    width: 128px;
+    height: 128px;
+    margin-bottom: 32px;
+    position: relative;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+.button
+{
+    margin: auto;
+    text-shadow: 0 1px 0 #FFFFFF;
+    text-align:center;
+    /* color:#638caa; */
+    background: url(../images/bg_button.png) top center no-repeat;
+}
+#container {
+    height: 150px;
+    width: 384px;
+    margin: auto;
+    //background: url(images/bg_multiple.jpg) no-repeat top center;
+}
+
+#animateButton {
+    width: 256px;
+}

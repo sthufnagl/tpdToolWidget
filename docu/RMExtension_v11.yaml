@@ -1,0 +1,1038 @@
+swagger: "2.0"
+info:
+  version: "0.1.1"
+  title: RMService API
+  description: API to connect to the Keyword Analyser Service and Test Data Creation Service
+host: ssejtsserver:9443
+schemes:
+  - https
+security:
+  - token: []
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /logging:
+    get:
+      consumes:
+      - text/plain
+      produces:
+      - text/plain
+      summary: Get the Logfile content
+      description: The Logfile content as a String
+      parameters:
+        - name: filename
+          in: query
+          description: The log file name to get
+          required: false
+          type: string
+      security:
+        - token: []
+      tags:
+       - Logging
+      responses:
+        "200":
+          description: Returns the Logfile content
+          schema:
+            type: string
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+    post:
+      consumes:
+      - text/plain
+      produces:
+      - text/plain
+      summary: Set the Loglevel
+      description: Set the Loglevel
+      parameters:
+        - name: level
+          in: body
+          description: The level
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - Logging
+      responses:
+        "200":
+          description: Sucess
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+    put:
+      consumes:
+      - text/plain
+      produces:
+      - text/plain
+      summary: Create a new log file
+      description: Create a new log file
+      parameters:
+        - name: filename
+          in: body
+          description: The filename
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - Logging
+      responses:
+        "200":
+          description: Sucess
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+  /testdata/{identifier}:
+    get:
+      summary: Retrieve Information for a specific Stream
+      description: Provides the information if the Test Data Creation Service has already been running, is currently running, or did yet run for the specified Stream
+      parameters:
+        - name: identifier
+          in: path
+          description: The project area URI. Not the full URL.
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - TestData
+       - Service
+      responses:
+        "200":
+          description: Returns the service Status for the specified Stream.
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/TestDataServiceStatus'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+    post:
+      summary: Start Service for a specific Stream
+      description: Will trigger the start of the Keyword Analysis for the specified Stream
+      parameters:
+        - name: identifier
+          in: path
+          description: The project area URI. Not the full URL.
+          required: true
+          type: string
+        - name: TestDataServiceInfo
+          in: body
+          description: The URLS needed to run the service
+          required: true
+          schema:
+            $ref: '#/definitions/TestDataServiceInfo'
+      security:
+        - token: []
+      tags:
+       - Service
+       - TestData
+      responses:
+        "200":
+          description: Returns the service Status for the specified Stream.
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/TestDataServiceStatus'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+  /category/{identifier}:
+    get:
+      summary: Retrieve Information for a specific Stream
+      description: Provides the information if the Test Data Creation Service has already been running, is currently running, or did yet run for the specified Stream
+      parameters:
+        - name: identifier
+          in: path
+          description: The project area URI. Not the full URL.
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - Service
+       - Category
+      responses:
+        "200":
+          description: Returns the service Status for the specified Stream.
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/CategoryServiceStatus'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+    post:
+      summary: Start Service for a specific Stream
+      description: Will trigger the start of the Keyword Analysis for the specified Stream
+      parameters:
+        - name: identifier
+          in: path
+          description: The project area URI. Not the full URL.
+          required: true
+          type: string
+        - name: CategoryServiceInfo
+          in: body
+          description: The URLS needed to run the service
+          required: true
+          schema:
+            $ref: '#/definitions/CategoryServiceInfo'
+      security:
+        - token: []
+      tags:
+       - Service
+       - Category
+      responses:
+        "200":
+          description: Returns the service Status for the specified Stream.
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/CategoryServiceStatus'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+  /globalconfig/component:
+    get:
+      summary: Get all Components
+      description: Get all Components
+      parameters:
+        - name: gcurl
+          in: query
+          description: The url of the gc app
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - GlobalConfig
+      responses:
+        "200":
+          description: Returns the url for the name
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Component'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "404":
+          description: The name could not be resolved 
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+  /globalconfig/stream:
+    get:
+      summary: Get all Streams
+      description: Get all Streams
+      parameters:
+        - name: componentid
+          in: query
+          description: The componentId to get the streams for
+          required: true
+          type: string
+        - name: gcurl
+          in: query
+          description: The url of the gc app
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - GlobalConfig
+      responses:
+        "200":
+          description: Returns the url for the name
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Stream'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "404":
+          description: The name could not be resolved 
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+  /globalconfig/stream/{streamurl}:
+    get:
+      summary: Get all Streams
+      description: Get all Streams
+      parameters:
+        - name: componentid
+          in: query
+          description: The componentId to get the streams for
+          required: true
+          type: string
+        - name: gcurl
+          in: query
+          description: The url of the gc app
+          required: true
+          type: string
+        - name: streamurl
+          in: path
+          description: The id of the stream
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - GlobalConfig
+      responses:
+        "200":
+          description: Returns the url for the name
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/StreamDetails'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "404":
+          description: The name could not be resolved 
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+  /resolve/requirementtype:
+    get:
+      summary: Retrieve Information for a specific Stream
+      description: Provides the information if the Test Data Creation Service has already been running, is currently running, or did yet run for the specified Stream
+      parameters:
+        - name: name
+          in: query
+          description: The name to resolve
+          required: true
+          type: string
+        - name: projectarea
+          in: query
+          description: The name of the project area
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - Resolve
+      responses:
+        "200":
+          description: Returns the url for the name
+          schema:
+            type: string
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "404":
+          description: The name could not be resolved 
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+  /resolve/attributetype:
+    get:
+      summary: Retrieve Information for a specific Stream
+      description: Provides the information if the Test Data Creation Service has already been running, is currently running, or did yet run for the specified Stream
+      parameters:
+        - name: name
+          in: query
+          description: The name to resolve
+          required: true
+          type: string
+        - name: projectarea
+          in: query
+          description: The name of the project area
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - Resolve
+      responses:
+        "200":
+          description: Returns the url for the name
+          schema:
+            type: string
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "404":
+          description: The name could not be resolved 
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+
+  /resolve/projectarea:
+    get:
+      summary: Retrieve Information for a specific Stream
+      description: Provides the information if the Test Data Creation Service has already been running, is currently running, or did yet run for the specified Stream
+      parameters:
+        - name: name
+          in: query
+          description: The name to resolve
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - Resolve
+      responses:
+        "200":
+          description: Returns the url for the name
+          schema:
+            type: string
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "404":
+          description: The name could not be resolved 
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+
+  /resolve/component:
+    get:
+      summary: Retrieve Information for a specific Stream
+      description: Provides the information if the Test Data Creation Service has already been running, is currently running, or did yet run for the specified Stream
+      parameters:
+        - name: name
+          in: query
+          description: The name to resolve
+          required: true
+          type: string
+        - name: gcurl
+          in: query
+          description: The url of the gc app
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - Resolve
+      responses:
+        "200":
+          description: Returns the id for the name
+          schema:
+            type: string
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "404":
+          description: The name could not be resolved 
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+
+  /resolve/stream:
+    get:
+      summary: Retrieve Information for a specific Stream
+      description: Provides the information if the Test Data Creation Service has already been running, is currently running, or did yet run for the specified Stream
+      parameters:
+        - name: name
+          in: query
+          description: The name to resolve
+          required: true
+          type: string
+        - name: component
+          in: query
+          description: The component name
+          required: true
+          type: string
+        - name: gcurl
+          in: query
+          description: The url of the gc app
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - Resolve
+      responses:
+        "200":
+          description: Returns the url for the name
+          schema:
+            type: string
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "404":
+          description: The name could not be resolved 
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+  /ext/key/v1/{identifier}:
+    get:
+      summary: Retrieve Information for a specific Stream
+      description: Provides the information if the Keyword Analysis has already been running, is currently running, or did yet run for the specified Stream
+      parameters:
+        - name: identifier
+          in: path
+          description: The project area URI. Not the full URL.
+          required: true
+          type: string
+      security:
+        - token: []
+      tags:
+       - Service
+       - Key
+      responses:
+        "200":
+          description: Returns the service Status for the specified Stream.
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/ServiceStatus'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+  
+    post:
+      summary: Start Service for a specific Stream
+      description: Will trigger the start of the Keyword Analysis for the specified Stream
+      parameters:
+        - name: identifier
+          in: path
+          description: The project area URI. Not the full URL.
+          required: true
+          type: string
+        - name: ServiceInfo
+          in: body
+          description: The URLS needed to run the service
+          required: true
+          schema:
+            $ref: '#/definitions/ServiceInfo'
+      security:
+        - token: []
+      tags:
+       - Service
+       - Key
+      responses:
+        "200":
+          description: Returns the service Status for the specified Stream.
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/ServiceStatus'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter  
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+    delete:
+      summary: Start the Deletion Service
+      description: Will trigger the start of the Artifact Deletion Process for the specified Stream
+      parameters:
+        - name: identifier
+          in: path
+          description: The project area URI. Not the full URL.
+          required: true
+          type: string
+        - name: debug
+          in: query
+          description: true or false. If debug is true no resources will get deleted.
+          type: string
+          required: false
+      security:
+        - token: []
+      tags:
+       - Service
+       - Key
+      responses:
+        "200":
+          description: Returns the service Status for the specified Stream.
+          schema:
+            type: object
+            items: 
+              $ref: '#/definitions/ServiceStatus'
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameter
+        "404":
+          description: Run analysis first
+        "412":
+          description: Wait for analysis to finish
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+            
+  /ext/key/v1/login:
+    post:
+      summary: Login to the api
+      description: Authenticate to the system and receive the secret which is used in all subsequent calls. The secret is also used for websocket connections.
+      parameters:
+        - name: userCredentials
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserCredentials'
+      security:
+        - token: []
+      tags: 
+        - Login
+      responses:
+        "200":
+          description: Returns the security token
+          schema:
+            type: string
+        "400":
+          description: The request could not be understood by the server due to malformed or missing request parameters         
+          schema: 
+            $ref: '#/definitions/Error'
+        "403":
+          description: User name and password do not match.
+          schema: 
+            $ref: '#/definitions/Error'       
+        "500":
+          description: unexpected error
+          schema: 
+            $ref: '#/definitions/Error'
+
+securityDefinitions:
+  token:
+    type: apiKey
+    description: The token which is acquired from the login service and supplied in the header to access the other services.
+    name: token
+    in: header  
+    
+definitions:
+
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+      message: 
+        type: string
+        description: Language-specific overall error message
+              
+  ServiceStatus:
+    type: object
+    description: ServiceStatus
+    properties:
+      progress:
+        type: integer
+        description: progress 0 - 100
+      total_artifacts:
+      	type: integer
+      	description: Total Artifacts found during analysis
+      artifacts_to_be_deleted:
+      	type: integer
+      	description: Number of Artifacts which will be deleted in the deletion step
+      analysis_status:
+        type: integer
+        description: Returns the status. 0 is not yet running 1 is running 2 is finished -1 is error ocurred
+      deletion_status:
+        type: integer
+        description: the url of the PA in which it should run
+      error:
+        type: string
+        description: Errorcode and Errorrext which occured on the server
+    example: {progress: 0, total_artifacts: 0, artifacts_to_be_deleted: 0, analysis_status: -1, deletion_status: 0, error: "Could not find ProjectArea under the provided path"
+              }
+              
+  ServiceInfo:
+    type: object
+    description: Collection of the information needed to run the keyword analysis service
+    properties:
+      projectArea:
+        type: string
+        description: The url of the Projectarea
+      artifactType:
+        type: string
+        description: The url of the artifact type to analyse
+      artifactCondition:
+        type: string
+        description: The url of the artifact property "condition"
+      artifactApplies:
+        type: string
+        description: The url of the artifact property "applies"
+      keyWordType:
+        type: string
+        description: The url of the keyWord ArtifactType
+      keyWordApplies:
+        type: string
+        description: The url of the keyWord property "applies"
+      configContext:
+        type: string
+        description: The url of the config identifier
+      globalConfig:
+        type: string
+        description: The Glocal Configuration URL
+    example: {"projectArea": "https://ssejtsserver:9443/rm/process/project-areas/_VdIZchvTEeW5XLpLPTR7rg","artifactType": "https://ssejtsserver:9443/rm/types/_ZrcM8RvTEeW5XLpLPTR7rg","artifactCondition": "https://ssejtsserver:9443/rm/types/_YKIyQRvTEeW5XLpLPTR7rg","artifactApplies":"https://ssejtsserver:9443/rm/types/_ZMSy0RvTEeW5XLpLPTR7rg","keyWordType": "https://ssejtsserver:9443/rm/types/_ZbynYxvTEeW5XLpLPTR7rg", "keyWordApplies": "https://ssejtsserver:9443/rm/types/_ZMSy0RvTEeW5XLpLPTR7rg", "configContext": "https://ssejtsserver:9443/rm/cm/stream/_UTWEoDdjEeWmCpBmMFd7xg", "globalConfig": "https://ssejtsserver:9443/gc/configuration/34"}
+
+  CategoryServiceInfo:
+    type: object
+    description: Collection of the information needed to run the category service
+    properties:
+      projectArea:
+        type: string
+        description: The url of the Projectarea
+      globalConfig:
+        type: string
+        description: The Glocal Configuration URL
+      artifactType:
+        type: string
+        description: The url of the artifact type to analyse
+      attribute:
+        type: string
+        description: The url or name of the attribute
+    example: {"projectArea": "https://ssejtsserver:9443/rm/process/project-areas/_VdIZchvTEeW5XLpLPTR7rg", "globalConfig": "https://ssejtsserver:9443/gc/configuration/34", "artifactType": "https://ssejtsserver:9443/rm/types/_ZrcM8RvTEeW5XLpLPTR7rg", "attribute": "Origin"}
+        
+  CategoryServiceStatus:
+    type: object
+    description: CategoryServiceStatus
+    properties:
+      progress:
+        type: integer
+        description: progress 0 - 100
+      category_status:
+        type: integer
+        description: Returns the status. 0 is not yet running 1 is running 2 is finished -1 is error ocurred
+      changed_test_cases:
+        type: integer
+        description: Number of test cases which have been changed
+      total_artifacts:
+      	type: integer
+      	description: Total Artifacts found during analysis  
+      error:
+        type: string
+        description: Errorcode and Errorrext which occured on the server
+    example: {progress: 0, category_status: 0, , changed_test_cases: 0, total_artifacts: 0, error: "Could not find ProjectArea under the provided path"
+              }
+
+  TestDataServiceInfo:
+    type: object
+    description: Collection of the information needed to run the test data creation service
+    properties:
+      projectArea:
+        type: string
+        description: The url of the Projectarea
+      configContext:
+        type: string
+        description: The url of the config identifier
+      globalConfig:
+        type: string
+        description: The Glocal Configuration URL
+      artifactType:
+        type: string
+        description: The url of the artifact type to analyse
+      parameterType:
+        type: string
+        description: The url of the parameter type
+    example: {"projectArea": "https://ssejtsserver:9443/rm/process/project-areas/_VdIZchvTEeW5XLpLPTR7rg", "configContext": "https://ssejtsserver:9443/rm/cm/stream/_UTWEoDdjEeWmCpBmMFd7xg", "globalConfig": "https://ssejtsserver:9443/gc/configuration/34", "artifactType": "https://ssejtsserver:9443/rm/types/_ZrcM8RvTEeW5XLpLPTR7rg", "parameterType": "https://ssejtsserver:9443/rm/types/_ZYhQ8RvTEeW5XLpLPTR7rg"}
+        
+  TestDataServiceStatus:
+    type: object
+    description: TestDataServiceStatus
+    properties:
+      progress:
+        type: integer
+        description: progress 0 - 100
+      creation_status:
+        type: integer
+        description: Returns the status. 0 is not yet running 1 is running 2 is finished -1 is error ocurred
+      changed_test_cases:
+        type: integer
+        description: Number of test cases which have been changed
+      changed_test_scripts:
+        type: integer
+        description: Number of test scripts which have been changed  
+      error:
+        type: string
+        description: Errorcode and Errorrext which occured on the server
+    example: {progress: 0, creation_status: 0, error: "Could not find ProjectArea under the provided path"
+              }
+  Component:
+    type: object
+    description: Global Configuration Component
+    properties:
+      archived:
+        type: string
+        description: Archived false/true
+      itemId: 
+        type: string
+        description: UUID
+      name:
+        type: string
+        description: Literal Name
+      webUrl:
+        type: string
+        description: Url to the GC page for that component
+    example: {"archived": "false",
+              "itemId": "_WZhYIBvyEeWSjNkenSP4qQ",
+              "name": "TRAXX AC3",
+              "webUrl": "https://ssejtsserver:9443/gc/web/projects/TRAXX%20AC3"
+              }
+  Stream:
+    type: object
+    description: Global Configuration Component
+    properties:
+      basedOnIsMutable:
+        type: string
+        description: 
+      basedOnTitle: 
+        type: string
+        description: 
+      basedOnUri:
+        type: string
+        description: 
+      componentTitle:
+        type: string
+        description: 
+      componentUri:
+        type: string
+        description: 
+      createdTime:
+        type: string
+        description: 
+      creatorName:
+        type: string
+        description:
+      creatorUri:
+        type: string
+        description:
+      customAttributeValues:
+        type: string
+        description:
+      customLinkValues:
+        type: string
+        description: 
+      description:
+        type: string
+        description:
+      isLocal:
+        type: string
+        description:
+      isMutable:
+        type: string
+        description: 
+      isPersonal:
+        type: string
+        description:
+      isUnderConstruction:
+        type: string
+        description:
+      modifiedTime:
+        type: string
+        description:
+      securityContextUri:
+        type: string
+        description:
+      tags:
+        type: string
+        description:
+      title:
+        type: string
+        description:
+      type:
+        type: string
+        description:
+      uri:
+        type: string
+        description:
+  
+  StreamDetails:
+    type: object
+    description: Details for a Global Configuration Stream containing its children
+    properties:
+      basedOnIsMutable:
+        type: string
+        description: 
+      basedOnTitle: 
+        type: string
+        description: 
+      basedOnUri:
+        type: string
+        description:
+      children:
+        type: array
+        schema:
+            $ref: '#/definitions/StreamChildren'
+        description: 
+      componentTitle:
+        type: string
+        description: 
+      componentUri:
+        type: string
+        description: 
+      createdTime:
+        type: string
+        description: 
+      creatorName:
+        type: string
+        description:
+      creatorUri:
+        type: string
+        description:
+      customAttributeValues:
+        type: string
+        description:
+      customLinkValues:
+        type: string
+        description: 
+      description:
+        type: string
+        description:
+      hasComponentSkew:
+      	type: string
+      	description:
+      isLocal:
+        type: string
+        description:
+      isMutable:
+        type: string
+        description: 
+      isPersonal:
+        type: string
+        description:
+      isUnderConstruction:
+        type: string
+        description:
+      modifiedTime:
+        type: string
+        description:
+      partUri:
+      	type: string
+      	description:
+      pathSegment:
+      	type: string
+      	description:
+      securityContextUri:
+        type: string
+        description:
+      tags:
+        type: string
+        description:
+      title:
+        type: string
+        description:
+      type:
+        type: string
+        description:
+      uri:
+        type: string
+        description:
+  StreamChildren:
+    type: object
+    description: The children of a Global Configuration Stream
+    properties:
+      appName:
+        type: string
+        description: 
+      children: 
+        type: string
+        description: 
+      componentTitle:
+        type: string
+        description: 
+      componentUri:
+        type: string
+        description: 
+      createdTime:
+        type: string
+        description: 
+      creatorUri:
+        type: string
+        description:
+      description:
+        type: string
+        description:
+      isLocal:
+        type: string
+        description:
+      isMutable:
+        type: string
+        description: 
+      isPersonal:
+        type: string
+        description:
+      isUnderConstruction:
+        type: string
+        description:
+      modifiedTime:
+        type: string
+        description:
+      order:
+        type: string
+        description:
+      partEquivalenceId:
+        type: string
+        description:
+      partUri:
+      	type: string
+      	description:
+      pathSegment:
+      	type: string
+      	description:
+      securityContextUri:
+        type: string
+        description:
+      tags:
+        type: string
+        description:
+      title:
+        type: string
+        description:
+      creatorName:
+        type: string
+        description:
+      type:
+        type: string
+        description:
+      uri:
+        type: string
+        description:
+                    
+  UserCredentials:
+    type: object
+    description: User credentials to login to the system
+    properties:
+      name:
+        type: string
+        description: The username
+      password: 
+        type: string
+        description: The password
+      server:
+        type: string
+        description: The rm server url
+    example: {"name": "rational",
+              "password": "rational",
+              "server": "https://ssejtsserver:9443/rm"
+              }
