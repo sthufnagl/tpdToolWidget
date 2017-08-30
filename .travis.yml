@@ -1,0 +1,6 @@
+language: javascript
+dist: trusty
+network: bluezone
+sudo: false
+script: mvn clean verify
+
